@@ -1,0 +1,57 @@
+﻿@model IEnumerable<to_do_mvc.Dtos.ToDoReadDto>
+@{
+    ViewData["Title"] = "To Do";
+
+}
+
+<h1>To Do</h1>
+
+<form asp-action="Create" method="post">
+    <input class="col-9 input-group-text d-inline-block text-left" type="text" name="Name" placeholder="New To Do" />
+    <input class="col-2 margin-bottom-4 btn btn-primary" type="submit" value="Add" />
+</form>
+
+@if (Model.Count() > 0)
+{
+    <table class="col-11 table">
+        @foreach (var toDo in Model)
+        {
+            <tr>
+                <td class="col-6">
+                    <form method="post" asp-action="Update" asp-route-id="@toDo.Id">
+                        <input type="checkbox" asp-for="@toDo.IsCompleted" id="@toDo.Id" onclick="this.form.submit();" />
+                        <label for="@toDo.Id" class="@(toDo.IsCompleted ? "crossed" : "")">@toDo.Name</label>
+                    </form>
+                </td>
+                <td class="col-2">
+                    <form method="post">
+                        <button asp-action="Delete" asp-route-id="@toDo.Id" class="btn btn-danger" onclick="return confirm('Are you shure you want to delete?');">X</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <table class="col-11 table">
+        <tr>
+            <td>No to dos found</td>
+        </tr>
+    </table>
+}
+
+
+<style>
+    .crossed {
+        text-decoration: line-through;
+    } 
+
+    .margin-bottom-4 {
+        margin-bottom: 4px;
+    }
+</style>
+
+@section scripts {
+<partial name="_ValidationScriptsPartial" />
+}

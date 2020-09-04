@@ -1,0 +1,42 @@
+﻿@page
+@model to_do_razor.Pages.ToDoModel
+@{
+    ViewData["Title"] = "ToDo";
+}
+
+<h1>ToDo</h1>
+
+<div>
+    <form method="post">
+        <input type="text" asp-for="ToDo.ToDoText" placeholder="New To Do"/>
+        <input type="submit" value="Add" />
+    </form>
+</div>
+
+@if (Model.ToDos.Count() > 0)
+{
+    <ul>
+        @foreach (var item in Model.ToDos)
+        {
+            <li>
+                <form method="post" asp-page-handler="Update" asp-route-id="@item.Id">
+                    <label for="@item.Id" class="@(item.IsCompleted ? "crossed" : "")">@item.ToDoText</label>
+                    <input type="checkbox" asp-for="@item.IsCompleted" id="@item.Id" onclick="this.form.submit();" />
+                    <button asp-page-handler="Delete" asp-route-id="@item.Id">X</button>
+                </form>
+               
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <span> No to dos found</span>
+}
+
+<style>
+    .crossed {
+        text-decoration: line-through;
+    }
+</style>
+
